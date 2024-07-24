@@ -42,8 +42,8 @@ variable "ami" {
 }
 
 
-output "web_ip" {
-    value = aws_instance.variable_testing.public_ip
+#output "web_ip" {
+#    value = aws_instance.variable_testing.public_ip
   
-}
+#}
  
