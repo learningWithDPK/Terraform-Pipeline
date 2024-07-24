@@ -21,15 +21,15 @@ provider "aws" {
 
 }
 
-resource "aws_instance" "variable_testing" {
-    ami = var.ami
-    instance_type = var.instance_type
-    availability_zone = "eu-north-1c"
+# resource "aws_instance" "variable_testing" {
+#    ami = var.ami
+#    instance_type = var.instance_type
+#    availability_zone = "eu-north-1c"
     
-      tags = {
-        Name = "provisioner_testing"
-  }
-}
+#      tags = {
+#        Name = "provisioner_testing"
+#  }
+#}
 
 variable "instance_type" {
     type = string
@@ -42,8 +42,8 @@ variable "ami" {
 }
 
 
-output "web_ip" {
-    value = aws_instance.variable_testing.public_ip
+#output "web_ip" {
+#    value = aws_instance.variable_testing.public_ip
   
-}
+#}
  
