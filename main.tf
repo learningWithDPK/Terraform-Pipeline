@@ -36,7 +36,7 @@ resource "aws_instance" "variable_testing" {
        Name = "provisioner_testing"
  }
 metadata_options {
-    http_tokens = "optional"
+    http_tokens = "required"
   }
 }
 
