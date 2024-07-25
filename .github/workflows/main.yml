@@ -47,7 +47,20 @@ jobs:
       
       - name: Terraform Plan
         run: terraform plan
-
+      
+      - name: Post Plan Comment
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const planOutput = fs.readFileSync('plan.out', 'utf8');
+            const issue_number = context.payload.pull_request.number;
+            github.rest.issues.createComment({
+              ...context.repo,
+              issue_number,
+              body: `## Terraform Plan Result\n\`\`\`\n${planOutput}\n\`\`\``
+            }); 
+            
       - name: Terraform Apply
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: terraform apply -auto-approve
