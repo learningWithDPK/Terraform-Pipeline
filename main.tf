@@ -23,7 +23,7 @@ provider "aws" {
 
 }
 
-resource "aws_instance" "variable_testing" {
+/* resource "aws_instance" "variable_testing" {
    ami = var.ami
    instance_type = var.instance_type
    availability_zone = "eu-north-1c"
@@ -54,5 +54,5 @@ variable "ami" {
 output "web_ip" {
     value = aws_instance.variable_testing.public_ip
   
-}
+} */
  
