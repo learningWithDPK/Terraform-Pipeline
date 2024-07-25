@@ -1,14 +1,45 @@
 name: Terraform
 
-on: [pull_request, push]
-
+on: 
+  push:
+    branches: 
+    - main
+  pull_request:
+  
 jobs:
-  terraform:
+  lint:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+     
+      - name: Terraform Format
+        run: terraform fmt -check
+
+      - name: Terraform validate
+      - name: Install TFlint
+        run: |
+          curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
+
+      - name: TFlint
+        run: tflint
+      
+      - name: install tfsec
+        run: |
+          curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash
+      
+      - name: tfSec
+        run: tfsec
+            
+      - name: Install checkov
+        run: |
+          pip install checkov
+      - name: checkov
+        run: checkov -d
 
       - name: Setup AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -16,10 +47,6 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-     
       - name: Terraform Init
         run: terraform init
 
