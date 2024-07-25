@@ -27,10 +27,17 @@ resource "aws_instance" "variable_testing" {
    ami = var.ami
    instance_type = var.instance_type
    availability_zone = "eu-north-1c"
-    
+   root_block_device {
+    volume_type = "gp2"
+    volume_size = 20
+    encrypted   = true
+  } 
      tags = {
        Name = "provisioner_testing"
  }
+metadata_options {
+    http_tokens = "optional"
+  }
 }
 
 variable "instance_type" {
