@@ -9,12 +9,13 @@
 - [Ideas]
  - [ ] Sperate CI and CD tasks/jobs.
  - [ ] Add bettwe ruleset using github
-      - [ ] request for approval
-      - [ ] only pull request, not push 
+      - [x] request for approval. ( as it is single user have to disable it.)
+      - [x] only pull request, not push 
  - [ ] Add linting
-      - [ ] for code
-      - [ ] for security
-      - [ ] For testing 
+      - [x] for code
+      - [x] for security
+      - [ ] For testing
+      - [ ] For docs and other files.
  - [ ] Adding Unit to End-to-End test cases.
  - [ ] Impact Analysis
  - [ ] Drift dectection
