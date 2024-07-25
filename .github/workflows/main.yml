@@ -26,7 +26,7 @@ jobs:
           
       - name: Terraform Init
         run: terraform init
-        
+
       - name: Terraform validate
         run: terraform validate
         
@@ -43,14 +43,7 @@ jobs:
       
       - name: tfSec
         run: tfsec
-            
-      - name: Install checkov
-        run: |
-          pip install checkov
-     
-      - name: checkov
-        run: checkov -d
-
+      
       - name: Terraform Plan
         run: terraform plan
 
