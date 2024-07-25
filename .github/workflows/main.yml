@@ -46,7 +46,8 @@ jobs:
         run: tfsec
       
       - name: Terraform Plan
-        run: terraform plan
+        id: plan
+        run: terraform plan -no-color
       
       - name: Post Plan Comment
         uses: actions/github-script@v6
