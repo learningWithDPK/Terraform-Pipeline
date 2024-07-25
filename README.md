@@ -18,10 +18,14 @@
       - [ ] For docs and other files.
  - [ ] Adding Unit to End-to-End test cases.
  - [ ] Impact Analysis
+     - [ ]  add step to save artifact in artifactory (tfplan)  
  - [ ] Drift dectection
  - [ ] Branching
       - [ ] Use for workspace for dev, stag and prod.
- - [ ] Tagging Stratergies   
+ - [ ] Tagging Stratergies
+ - [ ] using prebuild conatiner images to improve performance.
+     - [ ] create custom conatiner
+     - [ ] create lifecycle for same to make sure we have different version avilable.    
 ### Level 1:
 ## Logs:
 **Day1**
