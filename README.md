@@ -1,22 +1,29 @@
 # Terraform pipeline implemenation guide
+We are using this repo as place holder to practice and test based on best practices for Terraform and IaC via  CICD pipeline. Here we will using different CICD tools, integration tools like linting, testing and other analytic tools like drift detection and impact analysis.
+
 - We will be using github action to create a CI/CD pipline for making changes to infrastructure using Terraform and Git.
 > Pre-requirement
 1. basic knowledge of Terraform and git.
 2. knows how to create repo.
 # Scope
 - [Learning]
-    1. we need to add AWS creditential in repo for Workflow to run.
+    1. How to add AWS creditential in repo for Workflow to run.
+    2. how to add Security in pipeline detecting security vulnerability.
 - [Ideas]
  - [ ] Sperate CI and CD tasks/jobs.
- - [ ] Add bettwe ruleset using github
+ - [ ] Add Better ruleset using github
       - [x] request for approval. ( as it is single user have to disable it.)
-      - [x] only pull request, not push 
+      - [x] only pull request, not push
+      - [x] Require a pull request before merging
  - [ ] Add linting
       - [x] for code
       - [x] for security
-      - [ ] For testing
+      - [x] For testing
       - [ ] For docs and other files.
- - [ ] Adding Unit to End-to-End test cases.
+ - [ ] Adding Unit to End-to-End test cases. [link](https://spacelift.io/blog/terraform-test)
+     - [ ] basic testing using tf validation, tf fmt, . (Integration testing)
+     - [ ] 
+     
  - [ ] Impact Analysis
      - [ ]  add step to save artifact in artifactory (tfplan)  
  - [ ] Drift dectection
