@@ -23,8 +23,15 @@ provider "aws" {
 
 }
 
+data "aws_ami" "ubuntu" {
+                most_recent = True
+        Filter {
+        name = name
+        values = ["ubuntu*"]
+        }
+}
 /* resource "aws_instance" "variable_testing" {
-   ami = var.ami
+   ami = data.aws_ami.ubuntu.id
    instance_type = var.instance_type
    availability_zone = "eu-north-1c"
    root_block_device {
@@ -45,10 +52,10 @@ variable "instance_type" {
     default = "t3.micro"
 }
 
-variable "ami" {
+/*variable "ami" {
     type = string
     default = "ami-03238ca76a3266a07"
-}
+}*/
 
 
 output "web_ip" {
