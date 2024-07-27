@@ -29,7 +29,7 @@ data "aws_ami" "ubuntu" {
   owners = ["self", "amazon"]
 }
 
-resource "aws_instance" "variable_testing" {
+/* resource "aws_instance" "variable_testing" {
   ami               = data.aws_ami.ubuntu.id
   instance_type     = var.instance_type
   availability_zone = "eu-north-1c"
@@ -53,4 +53,4 @@ variable "instance_type" {
 
 output "web_ip" {
   value = aws_instance.variable_testing.public_ip
-}
+} */
