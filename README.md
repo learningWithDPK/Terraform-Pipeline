@@ -5,6 +5,28 @@ We are using this repo as place holder to practice and test based on best practi
 > Pre-requirement
 1. basic knowledge of Terraform and git.
 2. knows how to create repo.
+
+# Workflow of pipeline
+
+We want to document each phase of pipeline and what was done in each phase/stage.
+1. Pre-source (Develop Code)
+2. Source/Code commit (push code into Repo using pull request)
+    - branch protection: we used branch ruleset to  get following behaviour
+        - No direct push, only via push request.
+        - Need 1 approval beofe mergeing code
+        - validate all steps are complete/pass before merging code.   
+3. Build phase ( static code analysis/linting, unit testing)
+    - Static code analysis/linting: we are using **tflint** and Terraform Fmt
+6. Test phase ( integration testing, end-2-end testing, security testing)
+    - terraform validate
+    - terraform plan -output
+    - tfsec / checkov
+    - need to make it more mature
+7. Release phase ( CD part: release to production as application or image )
+    - terraform apply -auto-approve
+8. Deploy phase( optional)
+9. Monitoring ( post-deployment and smoke testing)
+
 # Scope
 - [Learning]
     1. How to add AWS creditential in repo for Workflow to run.
