@@ -91,10 +91,6 @@ variable "instance_type" {
   default = "t3.micro"
 }
 
-
-output "web_ip" {
-  value = aws_instance.Jenkins_testing.public_ip
-}
 resource "aws_instance" Jenkins_testing {
     count=0
     ami = data.aws_ami.ubuntu.id
