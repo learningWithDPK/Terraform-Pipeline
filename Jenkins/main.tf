@@ -108,7 +108,3 @@ resource "aws_instance" Jenkins_testing {
     Name = "Jenkins_testing"
   }
 }
-
-output "web_ip" {
-  value = aws_instance.Jenkins_testing.public_ip
-}
