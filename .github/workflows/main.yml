@@ -24,25 +24,28 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
-      
+
       - name: Find all Terraform directories
         id: tf_dirs
         run: |
-          dirs=$(find . -type f -name "*.tf" -exec dirname {} \; | sort -u | awk '{print "\""$0"\""}')
-          echo "dirs=$dirs" >> $GITHUB_ENV
-      
+          dirs=$(find . -type f -name "*.tf" -exec dirname {} \; | sort -u)
+          # Create a temporary file to store the directories
+          echo "$dirs" > dirs.txt
+          # Set the environment variable from the file
+          echo "TF_DIRS=$(cat dirs.txt)" >> $GITHUB_ENV
+
       - name: Terraform Init
         run: |
-          for dir in ${{ env.dirs }}; do
-            dir=$(echo $dir | tr -d '"')  # Remove extra quotes if they exist
+          # Read the directories from the environment variable
+          for dir in ${{ env.TF_DIRS }}; do
             echo "Running terraform init in $dir"
             (cd "$dir" && terraform init)
           done
 
       - name: Terraform Validate
         run: |
-          for dir in ${{ env.dirs }}; do
-            dir=$(echo $dir | tr -d '"')  # Remove extra quotes if they exist
+          # Read the directories from the environment variable
+          for dir in ${{ env.TF_DIRS }}; do
             echo "Running terraform validate in $dir"
             (cd "$dir" && terraform validate)
           done
@@ -53,8 +56,8 @@ jobs:
 
       - name: TFlint
         run: |
-          for dir in ${{ env.dirs }}; do
-            dir=$(echo $dir | tr -d '"')  # Remove extra quotes if they exist
+          # Read the directories from the environment variable
+          for dir in ${{ env.TF_DIRS }}; do
             echo "Running tflint in $dir"
             (cd "$dir" && tflint)
           done
@@ -65,16 +68,16 @@ jobs:
       
       - name: tfSec
         run: |
-          for dir in ${{ env.dirs }}; do
-            dir=$(echo $dir | tr -d '"')  # Remove extra quotes if they exist
+          # Read the directories from the environment variable
+          for dir in ${{ env.TF_DIRS }}; do
             echo "Running tfsec in $dir"
             (cd "$dir" && tfsec)
           done
       
       - name: Terraform Plan
         run: |
-          for dir in ${{ env.dirs }}; do
-            dir=$(echo $dir | tr -d '"')  # Remove extra quotes if they exist
+          # Read the directories from the environment variable
+          for dir in ${{ env.TF_DIRS }}; do
             echo "Running terraform plan in $dir"
             (cd "$dir" && terraform plan)
           done
@@ -82,8 +85,8 @@ jobs:
       - name: Terraform Apply
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
-          for dir in ${{ env.dirs }}; do
-            dir=$(echo $dir | tr -d '"')  # Remove extra quotes if they exist
+          # Read the directories from the environment variable
+          for dir in ${{ env.TF_DIRS }}; do
             echo "Running terraform apply in $dir"
             (cd "$dir" && terraform apply -auto-approve)
           done
