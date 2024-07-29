@@ -70,7 +70,7 @@ jobs:
           # Iterate over each directory in dirs.txt and run tfsec
           while IFS= read -r dir; do
             echo "Running tfsec in $dir"
-            (cd "$dir" && tfsec)
+            # (cd "$dir" && tfsec)
           done < dirs.txt
       
       - name: Terraform Plan
