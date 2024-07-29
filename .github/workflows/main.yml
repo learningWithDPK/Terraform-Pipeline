@@ -1,11 +1,11 @@
 name: Terraform
 
-on: 
+on:
   push:
-    branches: 
-    - main
+    branches:
+      - main
   pull_request:
-  
+
 jobs:
   lint:
     name: Lint
@@ -28,66 +28,64 @@ jobs:
       - name: Find all Terraform directories
         id: find_dirs
         run: |
-          # Find directories containing .tf files
-          dirs=$(find . -type f -name "*.tf" -exec dirname {} \; | sort -u)
-          # Print each directory to ensure correct formatting
-          echo "$dirs" > dirs.txt
-          # Safely set the environment variable
-          echo "TF_DIRS=$(printf "%s\n" "$dirs")" >> $GITHUB_ENV
+          # Find directories containing .tf files, including subdirectories
+          find . -type f -name "*.tf" -exec dirname {} \; | sort -u > dirs.txt
+          # Print the directories for debugging
+          cat dirs.txt
 
       - name: Terraform Init
         run: |
-          # Iterate over directories and run terraform init
+          # Iterate over each directory in dirs.txt and run terraform init
           while IFS= read -r dir; do
             echo "Running terraform init in $dir"
             (cd "$dir" && terraform init)
-          done < <(echo "${{ env.TF_DIRS }}")
+          done < dirs.txt
 
       - name: Terraform Validate
         run: |
-          # Iterate over directories and run terraform validate
+          # Iterate over each directory in dirs.txt and run terraform validate
           while IFS= read -r dir; do
             echo "Running terraform validate in $dir"
             (cd "$dir" && terraform validate)
-          done < <(echo "${{ env.TF_DIRS }}")
-
+          done < dirs.txt
+        
       - name: Install TFlint
         run: |
           curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
 
       - name: TFlint
         run: |
-          # Iterate over directories and run tflint
+          # Iterate over each directory in dirs.txt and run tflint
           while IFS= read -r dir; do
             echo "Running tflint in $dir"
             (cd "$dir" && tflint)
-          done < <(echo "${{ env.TF_DIRS }}")
-
+          done < dirs.txt
+      
       - name: Install tfsec
         run: |
           curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash
-
+      
       - name: tfSec
         run: |
-          # Iterate over directories and run tfsec
+          # Iterate over each directory in dirs.txt and run tfsec
           while IFS= read -r dir; do
             echo "Running tfsec in $dir"
             (cd "$dir" && tfsec)
-          done < <(echo "${{ env.TF_DIRS }}")
-
+          done < dirs.txt
+      
       - name: Terraform Plan
         run: |
-          # Iterate over directories and run terraform plan
+          # Iterate over each directory in dirs.txt and run terraform plan
           while IFS= read -r dir; do
             echo "Running terraform plan in $dir"
             (cd "$dir" && terraform plan)
-          done < <(echo "${{ env.TF_DIRS }}")
+          done < dirs.txt
 
       - name: Terraform Apply
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
-          # Iterate over directories and run terraform apply
+          # Iterate over each directory in dirs.txt and run terraform apply
           while IFS= read -r dir; do
             echo "Running terraform apply in $dir"
             (cd "$dir" && terraform apply -auto-approve)
-          done < <(echo "${{ env.TF_DIRS }}")
+          done < dirs.txt
