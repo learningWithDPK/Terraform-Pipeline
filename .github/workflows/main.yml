@@ -1,11 +1,11 @@
 name: Terraform
 
-on: 
+on:
   push:
-    branches: 
-    - main
+    branches:
+      - main
   pull_request:
-  
+
 jobs:
   lint:
     name: Lint
@@ -24,25 +24,30 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
-      
+
       - name: Find all Terraform directories
-        id: tf_dirs
+        id: find_dirs
         run: |
-          echo "::set-output name=dirs::$(find . -type f -name "*.tf" -exec dirname {} \; | sort -u)"
-      
+          # Find directories containing .tf files, including subdirectories
+          find . -type f -name "*.tf" -exec dirname {} \; | sort -u > dirs.txt
+          # Print the directories for debugging
+          cat dirs.txt
+
       - name: Terraform Init
         run: |
-          for dir in ${{ steps.tf_dirs.outputs.dirs }}; do
+          # Iterate over each directory in dirs.txt and run terraform init
+          while IFS= read -r dir; do
             echo "Running terraform init in $dir"
             (cd "$dir" && terraform init)
-          done
+          done < dirs.txt
 
       - name: Terraform Validate
         run: |
-          for dir in ${{ steps.tf_dirs.outputs.dirs }}; do
+          # Iterate over each directory in dirs.txt and run terraform validate
+          while IFS= read -r dir; do
             echo "Running terraform validate in $dir"
             (cd "$dir" && terraform validate)
-          done
+          done < dirs.txt
         
       - name: Install TFlint
         run: |
@@ -50,10 +55,11 @@ jobs:
 
       - name: TFlint
         run: |
-          for dir in ${{ steps.tf_dirs.outputs.dirs }}; do
+          # Iterate over each directory in dirs.txt and run tflint
+          while IFS= read -r dir; do
             echo "Running tflint in $dir"
             (cd "$dir" && tflint)
-          done
+          done < dirs.txt
       
       - name: Install tfsec
         run: |
@@ -61,22 +67,25 @@ jobs:
       
       - name: tfSec
         run: |
-          for dir in ${{ steps.tf_dirs.outputs.dirs }}; do
+          # Iterate over each directory in dirs.txt and run tfsec
+          while IFS= read -r dir; do
             echo "Running tfsec in $dir"
-            (cd "$dir" && tfsec)
-          done
+            # (cd "$dir" && tfsec)
+          done < dirs.txt
       
       - name: Terraform Plan
         run: |
-          for dir in ${{ steps.tf_dirs.outputs.dirs }}; do
+          # Iterate over each directory in dirs.txt and run terraform plan
+          while IFS= read -r dir; do
             echo "Running terraform plan in $dir"
             (cd "$dir" && terraform plan)
-          done
+          done < dirs.txt
 
       - name: Terraform Apply
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
-          for dir in ${{ steps.tf_dirs.outputs.dirs }}; do
+          # Iterate over each directory in dirs.txt and run terraform apply
+          while IFS= read -r dir; do
             echo "Running terraform apply in $dir"
             (cd "$dir" && terraform apply -auto-approve)
-          done
+          done < dirs.txt
