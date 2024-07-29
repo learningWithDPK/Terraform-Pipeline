@@ -95,7 +95,7 @@ resource "aws_instance" Jenkins_testing {
     count=0
     ami = data.aws_ami.ubuntu.id
     instance_type = var.instance_type
-    key_name = "${aws_key_pair.deployer.key_name}"  # we have to use interpolation ${} . thisis used for dynamic configuration
+    key_name = aws_key_pair.deployer.key_name  # we have to use interpolation ${} . thisis used for dynamic configuration
     vpc_security_group_ids = [aws_security_group.my_security_group.id]
     user_data = data.template_file.user_data.rendered
     root_block_device {
