@@ -90,6 +90,7 @@ output "web_ip" {
   value = aws_instance.Jenkins_testing.public_ip
 }
 resource "aws_instance" Jenkins_testing {
+    count=0
     ami = data.aws_ami.ubuntu.id
     instance_type = var.instance_type
     key_name = "${aws_key_pair.deployer.key_name}"  # we have to use interpolation ${} . thisis used for dynamic configuration
